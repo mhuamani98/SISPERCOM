@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .diploma-container {
+            width: 210mm; height: 297mm; /* Tamaño A4 */
+            padding: 20mm; border: 15px double #2c3e50;
+            text-align: center; font-family: 'Georgia', serif;
+            position: relative; margin: auto;
+            background-image: url('/img/fondo-escudo.png'); /* Opcional */
+        }
+        .header { font-size: 24px; font-weight: bold; text-transform: uppercase; }
+        .content { margin-top: 50px; font-size: 18px; line-height: 1.6; }
+        .data-negocio { font-size: 22px; font-weight: bold; color: #1a252f; border-bottom: 1px solid #000; }
+        .firma-digital { 
+            position: absolute; bottom: 100px; right: 100px;
+            width: 200px; border-bottom: 1px solid #000;
+        }
+        @media print {
+            .no-print { display: none; }
+            body { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+    <button class="no-print" onclick="window.print()">Imprimir Certificado</button>
+    
+    <div class="diploma-box" style="border: 10px double #2c3e50; padding: 40px; font-family: serif; position: relative;">
+    <div class="text-center">
+        <h2>MUNICIPALIDAD DE LOS OLIVOS</h2>
+        <h4>CERTIFICADO DE LICENCIA DE FUNCIONAMIENTO</h4>
+    </div>
+    
+    <div class="content" style="margin-top: 30px; font-size: 1.2rem;">
+        <p>Razón Social: <strong th:text="${solicitud.nombreNegocio}"></strong></p>
+        <p>R.U.C.: <strong th:text="${solicitud.ruc}"></strong></p>
+        <p>Certificado N°: <span th:text="${solicitud.nroCertificado}"></span></p>
+    </div>
+
+    <div style="margin-top: 50px; text-align: right;">
+        <img th:if="${solicitud.firmaDigital != null}" 
+             th:src="@{'/uploads/' + ${solicitud.firmaDigital}}" 
+             style="width: 200px; border-bottom: 1px solid #000;">
+        <p>Firma del Gerente de Rentas</p>
+    </div>
+</div>
+</body>
+</html>

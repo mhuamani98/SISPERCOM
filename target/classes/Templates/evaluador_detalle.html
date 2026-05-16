@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="container mt-4">
+    <h2>Detalles de la Solicitud: <span th:text="${solicitud.nombreNegocio}"></span></h2>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>RUC:</strong> <span th:text="${solicitud.ruc}"></span></p>
+            <p><strong>Dirección:</strong> <span th:text="${solicitud.direccion}"></span></p>
+            <p><strong>Giro del Negocio:</strong> <span th:text="${solicitud.giro}"></span></p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Área:</strong> <span th:text="${solicitud.areaM2}"></span> m²</p>
+            <p><strong>Aforo Máximo:</strong> <span th:text="${solicitud.aforo}"></span> personas</p>
+            <p><strong>Nivel de Riesgo:</strong> <span th:text="${solicitud.riesgo}"></span></p>
+        </div>
+    </div>
+    <hr>
+    <form th:action="@{/solicitud/actualizar-estado}" method="post">
+        <input type="hidden" name="id" th:value="${solicitud.id}">
+        <div class="mb-3">
+            <label>Observaciones (opcional):</label>
+            <textarea name="observaciones" class="form-control"></textarea>
+        </div>
+        <button type="submit" name="nuevoEstado" value="APROBADO" class="btn btn-success">Aprobar Trámite</button>
+        <button type="submit" name="nuevoEstado" value="OBSERVADO" class="btn btn-warning">Observar</button>
+    </form>
+</div>
+    </body>
+</html>

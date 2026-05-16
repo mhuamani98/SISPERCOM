@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado de Licencia - ITSE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #525659; padding: 50px; }
+        
+        .hoja-diploma {
+            background-color: white;
+            width: 210mm;
+            height: 297mm; /* Tamaño A4 */
+            margin: auto;
+            padding: 20mm;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 20px solid #ffffff;
+            outline: 10px double #c5a059; /* El borde dorado */
+        }
+
+        .marca-agua {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            font-size: 150px;
+            font-weight: bold;
+            color: #000;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header-diploma { text-align: center; border-bottom: 2px solid #003366; padding-bottom: 10px; }
+        .titulo-municipio { font-family: 'Times New Roman', serif; color: #003366; font-size: 32px; font-weight: bold; }
+        
+        .contenido { text-align: center; margin-top: 50px; z-index: 1; position: relative; }
+        .certifica-que { font-family: 'Georgia', serif; font-style: italic; font-size: 24px; }
+        .nombre-negocio { font-family: 'Arial Black', sans-serif; font-size: 40px; color: #b08d57; margin: 30px 0; text-transform: uppercase; }
+        
+        .detalles-tecnicos { text-align: left; margin: 50px 80px; font-size: 18px; line-height: 2; }
+        
+        .footer-firmas { margin-top: 100px; display: flex; justify-content: space-between; padding: 0 50px; }
+        .firma-box { text-align: center; width: 250px; }
+        .linea-firma { border-top: 2px solid #000; margin-bottom: 5px; }
+        .hash-firma { font-family: 'Courier New', monospace; font-size: 10px; color: #666; word-break: break-all; }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .hoja-diploma { box-shadow: none; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hoja-diploma">
+        <div class="marca-agua">MUNICIPAL</div>
+
+        <div class="header-diploma">
+            <div class="titulo-municipio">MUNICIPALIDAD DE LOS OLIVOS</div>
+            <p class="mb-0">Gerencia de Desarrollo Económico</p>
+            <p><strong>CERTIFICADO DE INSPECCIÓN TÉCNICA DE SEGURIDAD EN EDIFICACIONES (ITSE)</strong></p>
+        </div>
+
+        <div class="contenido">
+            <p class="certifica-que">Se otorga el presente certificado a:</p>
+            <div class="nombre-negocio" th:text="${solicitud.nombreNegocio}">NOMBRE DEL NEGOCIO</div>
+            
+            <div class="detalles-tecnicos">
+                <p><strong>RUC:</strong> <span th:text="${solicitud.ruc}"></span></p>
+                <p><strong>GIRO:</strong> <span th:text="${solicitud.giroNegocio}"></span></p>
+                <p><strong>DIRECCIÓN:</strong> <span th:text="${solicitud.direccion}"></span></p>
+                <p><strong>AFORO MÁXIMO:</strong> <span th:text="${solicitud.aforo}"></span> personas</p>
+                <p><strong>NIVEL DE RIESGO:</strong> <span th:text="${solicitud.nivelRiesgo}"></span></p>
+            </div>
+
+            <p class="mt-4">Expedido el <span th:text="${#temporals.format(solicitud.fechaCreacion, 'dd/MM/yyyy')}"></span></p>
+        </div>
+
+        <div class="footer-firmas">
+            <div class="firma-box">
+                <div class="linea-firma"></div>
+                <p class="small mb-0">Inspector Técnico</p>
+                <p class="small text-muted">Aprobación de Seguridad</p>
+            </div>
+            
+            <div class="firma-box">
+                <p class="hash-firma" th:text="${solicitud.firmaDigital}">HASH-DE-FIRMA-XYZ</p>
+                <div class="linea-firma"></div>
+                <p class="small mb-0" th:text="${solicitud.abogadoEmisor}">Nombre del Abogado</p>
+                <p class="small font-weight-bold">AUTORIDAD EMISORA (LEGAL)</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <button onclick="window.print()" class="btn btn-dark d-print-none">Imprimir Certificado</button>
+        </div>
+    </div>
+    
+    <div class="container my-5">
+    <div class="border p-5 shadow-lg" style="border: 15px double #c5a059 !important; background: #fffaf0;">
+        <div class="text-center">
+            <h2 style="color: #003366; font-family: serif;">MUNICIPALIDAD DISTRITAL DE LOS OLIVOS</h2>
+            <h4 class="text-muted">GERENCIA DE DESARROLLO ECONÓMICO</h4>
+            <hr style="border-top: 3px solid #c5a059;">
+            <h1 class="my-4" style="font-family: 'Times New Roman';">CERTIFICADO DE LICENCIA</h1>
+        </div>
+
+        <div class="mt-5 px-4" style="font-size: 1.2rem; line-height: 2;">
+            <p>Se otorga el presente a: <strong th:text="${solicitud.nombreNegocio}"></strong></p>
+            <p>R.U.C.: <strong th:text="${solicitud.ruc}"></strong></p>
+            <p>Ubicación: <span th:text="${solicitud.direccion}"></span></p>
+            <p>Giro Autorizado: <strong th:text="${solicitud.giroNegocio}"></strong></p>
+            <p>Aforo Máximo: <span th:text="${solicitud.aforo}"></span> personas.</p>
+        </div>
+
+        <div class="row mt-5 pt-5 text-center">
+            <div class="col-6">
+                <div style="border-top: 1px solid #000; width: 200px; margin: auto;"></div>
+                <p>Inspección Técnica (ITSE)</p>
+            </div>
+            <div class="col-6">
+                <p class="small text-muted" th:text="${solicitud.firmaDigital}"></p>
+                <div style="border-top: 1px solid #000; width: 200px; margin: auto;"></div>
+                <p><strong th:text="${solicitud.abogadoEmisor}"></strong><br>Gerencia Legal</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

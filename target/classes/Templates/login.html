@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA ITSE | Acceso Directo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); min-height: 100vh; display: flex; align-items: center; font-family: 'Segoe UI', sans-serif; }
+        .login-card { border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: none; }
+        .role-box { transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: block; border: 2px solid transparent; }
+        .role-box:hover { transform: translateY(-5px); background-color: #f0f7ff !important; border-color: #0d6efd !important; }
+        .role-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card login-card p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3.5rem;"></i>
+                        <h2 class="fw-bold">Sistema ITSE</h2>
+                    
+                    <form th:action="@{/login}" method="post" class="mt-4">
+    
+    <div class="mb-3 text-start">
+        <label class="form-label fw-bold">Usuario:</label>
+        <input type="text" name="username" class="form-control" placeholder="Ingrese su usuario" required>
+    </div>
+
+    <div class="mb-3 text-start">
+        <label class="form-label fw-bold">Contraseña:</label>
+        <input type="password" name="password" class="form-control" placeholder="********" required>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger py-2">
+        <small>Usuario o clave incorrectos</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 shadow-sm">
+        Ingresar al Sistema
+    </button>
+</form>
+
+                    <div class="mt-4 pt-3 border-top text-center">
+                        <div class="alert alert-info py-2 mb-0">
+                            <small class="fw-bold"><i class="bi bi-info-circle me-1"></i> Sistema de Licencias de Funcionamiento</small>
+                            <br>
+                            <small class="text-muted">Grupo 5 - Sol_Web</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

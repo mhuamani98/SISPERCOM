@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Evaluador - ITSE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .btn-group-custom .btn { border-color: #0d6efd; color: #0d6efd; background: white; }
+        .status-badge-pending { background-color: #ffc107; color: black; font-weight: bold; padding: 5px 15px; border-radius: 5px; }
+        .table thead { background-color: #f8f9fa; }
+        .modal-header-custom { background-color: #0d6efd; color: white; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-shield-check me-2"></i>SISTEMA ITSE</a>
+            <div class="ms-auto">
+                <span class="text-light me-3">Bienvenido, <strong>Evaluador</strong></span>
+                <a th:href="@{/login}" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Bandeja de Validación de Trámites</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Negocio / RUC</th>
+                                <th>Info. Técnica</th> <th>Documentos</th>
+                                <th>Estado</th>
+                                <th style="min-width: 300px;">Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="solicitud : ${solicitudes}">
+                                <td>
+                                    <div class="fw-bold" th:text="${solicitud.nombreNegocio}"></div>
+                                    <small class="text-muted" th:text="${'RUC: ' + solicitud.ruc}"></small>
+                                </td>
+                                
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm text-white" 
+                                            data-bs-toggle="modal" 
+                                            th:data-bs-target="'#modalDetalle' + ${solicitud.id}">
+                                        <i class="bi bi-eye-fill"></i> Ver Datos
+                                    </button>
+
+                                    <div class="modal fade" th:id="'modalDetalle' + ${solicitud.id}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content text-start">
+                                                <div class="modal-header modal-header-custom">
+                                                    <h5 class="modal-title">Detalles Técnicos: <span th:text="${solicitud.nombreNegocio}"></span></h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+    <p><strong><i class="bi bi-geo-alt-fill me-2"></i>Dirección:</strong> 
+       <span th:text="${solicitud.direccion != null ? solicitud.direccion : 'No especificada'}"></span>
+    </p>
+    
+    <p><strong><i class="bi bi-briefcase-fill me-2"></i>Giro:</strong> 
+       <span th:text="${solicitud.giroDetallado != null ? solicitud.giroDetallado : (solicitud.giro != null ? solicitud.giro : 'Sin giro registrado')}"></span>
+    </p>
+    
+    <p><strong><i class="bi bi-rulers me-2"></i>Área:</strong> 
+       <span th:text="${solicitud.areaM2 != null ? solicitud.areaM2 + ' m²' : '0.00 m²'}"></span>
+    </p>
+    
+    <p><strong><i class="bi bi-people-fill me-2"></i>Aforo:</strong> 
+       <span th:text="${solicitud.aforo != null ? solicitud.aforo + ' Personas' : '0 Personas'}"></span>
+    </p>
+    
+    <p><strong><i class="bi bi-exclamation-triangle-fill me-2"></i>Riesgo:</strong> 
+       <span th:text="${solicitud.riesgo != null ? solicitud.riesgo : 'BAJO (Por defecto)'}"></span>
+    </p>
+</div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="btn-group border rounded">
+                                        <a th:if="${solicitud.archivoItse != null}" th:href="@{'/uploads/' + ${solicitud.archivoItse}}" target="_blank" class="btn btn-outline-primary border-0">ITSE</a>
+                                        <a th:if="${solicitud.archivoContrato != null}" th:href="@{'/uploads/' + ${solicitud.archivoContrato}}" target="_blank" class="btn btn-outline-primary border-0 border-start border-end">Contrato</a>
+                                        <a th:if="${solicitud.archivoVoucher != null}" th:href="@{'/uploads/' + ${solicitud.archivoVoucher}}" target="_blank" class="btn btn-outline-primary border-0">Voucher</a>
+                                        <span th:if="${solicitud.archivoItse == null && solicitud.archivoContrato == null && solicitud.archivoVoucher == null}" class="text-muted small p-2">Sin archivos</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:text="${solicitud.estado}" 
+                                          th:class="${solicitud.estado == 'PENDIENTE' ? 'status-badge-pending' : 
+                                                   (solicitud.estado == 'APROBADO' ? 'badge bg-success' : 'badge bg-danger')}">
+                                    </span>
+                                </td>
+                                <td>
+                                    <form th:action="@{/solicitud/actualizar-estado}" method="post" class="d-flex gap-2">
+                                        <input type="hidden" name="id" th:value="${solicitud.id}">
+                                        <select name="nuevoEstado" class="form-select form-select-sm">
+                                            <option value="PENDIENTE" th:selected="${solicitud.estado == 'PENDIENTE'}">Pendiente</option>
+                                            <option value="EN REVISION" th:selected="${solicitud.estado == 'EN REVISION'}">Observado</option>
+                                            <option value="APROBADO" th:selected="${solicitud.estado == 'APROBADO'}">Aprobar</option>
+                                            <option value="RECHAZADO" th:selected="${solicitud.estado == 'RECHAZADO'}">Rechazar</option>
+                                        </select>
+                                        <input type="text" name="observaciones" class="form-control form-control-sm" placeholder="Nota..." th:value="${solicitud.observaciones}">
+                                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-send-check"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(solicitudes)}">
+                                <td colspan="5" class="text-center py-5 text-muted">No hay trámites pendientes.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
